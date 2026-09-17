@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Inserción de Trama — Enlaces del proyecto</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Questrial&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --rose:#1E3A5F;
+    --rose-md:#3D6B96;
+    --rose-lt:#7FA8C9;
+    --rose-xs:#DCE7F0;
+    --cream:#F6F8FA;
+    --cream-dk:#E8EDF1;
+    --cream-bd:#CDD8E0;
+    --ink:#1F2937;
+    --ink2:#3F4B5C;
+    --muted:#6B7684;
+    --on-ink:#F0F4F8;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1{ font-family:'Questrial', sans-serif; font-weight:400; letter-spacing:0.005em; margin:0; }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:0.16em; font-size:11px; color:var(--rose); font-weight:600; }
+
+  /* franja tejida — mismo detalle de marca que el landing */
+  .strip{ width:100%; overflow:hidden; line-height:0; }
+  .strip svg{ width:100%; height:14px; display:block; }
+
+  .page{ max-width:600px; margin:0 auto; padding:64px 24px 56px; }
+
+  .lt-header{ text-align:center; }
+  .lt-icon{ width:52px; height:52px; margin:0 auto 20px; border-radius:14px; background:var(--rose); display:flex; align-items:center; justify-content:center; }
+  .lt-icon svg{ width:26px; height:26px; color:var(--on-ink); }
+  .lt-header h1{ font-size:34px; line-height:1.15; letter-spacing:-0.01em; color:var(--ink); margin-top:18px; }
+  .lt-header h1 span{ color:var(--rose); }
+  .lt-sub{ margin-top:12px; font-size:15px; color:var(--ink2); max-width:460px; margin-left:auto; margin-right:auto; }
+
+  .lt-links{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .lt-link{ position:relative; display:flex; flex-direction:column; padding:20px 20px; background:var(--cream-dk); border:1px solid var(--cream-bd); border-radius:12px; text-decoration:none; transition:transform .15s ease, border-color .15s ease, background .15s ease; }
+  .lt-link:hover{ transform:translateY(-2px); border-color:var(--rose-md); background:#fff; }
+
+  .lt-link .icon-box{ width:44px; height:44px; border-radius:10px; background:var(--rose-xs); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-bottom:14px; }
+  .lt-link .icon{ width:22px; height:22px; color:var(--rose); }
+  .lt-link h3{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin:0; font-family:'IBM Plex Sans'; font-weight:600; font-size:15.5px; color:var(--ink); }
+  .lt-link p{ margin:6px 0 0; font-size:12.5px; color:var(--muted); }
+
+  /* La última tarjeta de un grupo impar ocupa todo el ancho, para no dejar un hueco vacío */
+  .lt-group .lt-links a:only-child,
+  .lt-group .lt-links a:last-child:nth-child(odd){ grid-column:1 / -1; }
+
+  /* Tarjetas destacadas (los dos accesos principales) */
+  .lt-featured{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:40px; }
+  .lt-feat-card{ position:relative; display:flex; flex-direction:column; padding:28px 24px; background:var(--rose-xs); border:1px solid var(--rose-md); border-radius:14px; text-decoration:none; transition:transform .15s ease, background .15s ease; }
+  .lt-feat-card:hover{ transform:translateY(-3px); background:#fff; }
+
+  .lt-feat-card .icon-box{ width:52px; height:52px; border-radius:12px; background:var(--rose); margin-bottom:18px; display:flex; align-items:center; justify-content:center; }
+  .lt-feat-card .icon{ width:26px; height:26px; color:var(--on-ink); }
+  .lt-feat-card h3{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin:0; font-family:'IBM Plex Sans'; font-weight:600; font-size:17.5px; color:var(--ink); }
+  .lt-feat-card p{ margin:8px 0 0; font-size:13px; color:var(--ink2); }
+
+
+  /* Grupos de enlaces por categoría */
+  .lt-group{ margin-top:40px; }
+  .lt-group-label{ font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:0.12em; font-size:11px; color:var(--muted); margin-bottom:14px; padding-left:2px; }
+
+  @media (max-width:560px){ .lt-featured{ grid-template-columns:1fr; } .lt-links{ grid-template-columns:1fr; } .lt-group .lt-links a{ grid-column:auto; } }
+  .lt-badge{ position:absolute; top:-9px; left:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.06em; background:var(--rose); color:var(--on-ink); padding:3px 9px; border-radius:20px; }
+
+  .lt-footer{ margin-top:52px; text-align:center; }
+  .lt-footer p{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:4px 0; }
+
+  @media (max-width:420px){
+    .lt-feat-card{ padding:22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="strip"><svg viewBox="0 0 720 18" preserveAspectRatio="none"><rect x="0" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="18" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="36" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="54" y="0" width="15" height="15" fill="#3D6B96"/><rect x="72" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="90" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="108" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="126" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="144" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="162" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="180" y="0" width="15" height="15" fill="#3D6B96"/><rect x="198" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="216" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="234" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="252" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="270" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="288" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="306" y="0" width="15" height="15" fill="#3D6B96"/><rect x="324" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="342" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="360" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="378" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="396" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="414" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="432" y="0" width="15" height="15" fill="#3D6B96"/><rect x="450" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="468" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="486" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="504" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="522" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="540" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="558" y="0" width="15" height="15" fill="#3D6B96"/><rect x="576" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="594" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="612" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="630" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="648" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="666" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="684" y="0" width="15" height="15" fill="#3D6B96"/><rect x="702" y="0" width="15" height="15" fill="#3F4B5C"/></svg></div>
+
+  <div class="page">
+    <div class="lt-header">
+      <div class="lt-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M8 6v12M16 6v12" stroke-width="1.1" opacity="0.6"/></svg>
+      </div>
+      <span class="eyebrow">Grupo 5 · InfoB · 2026</span>
+      <h1>Control de<br>Inserción de <span>Trama</span></h1>
+      <p class="lt-sub">Todos los enlaces del proyecto, en un solo lugar: landing, prototipo, documentación, manual, planificación y código fuente.</p>
+    </div>
+
+    <div class="lt-featured">
+
+      <a class="lt-feat-card" href="https://manfredojuanignacio08-prog.github.io/Landing_Page_CIT/" target="_blank" rel="noopener">
+        <span class="lt-badge">Empezá acá</span>
+        <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9.5 21v-7h5v7"/></svg></div>
+        <h3>Landing page</h3>
+        <p>Presentación completa: problema, funciones, arquitectura, hardware y equipo.</p>
+      </a>
+
+      <a class="lt-feat-card" href="https://control-trama-backend.onrender.com/" target="_blank" rel="noopener">
+        <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 3 20 12 6 21 Z"/></svg></div>
+        <h3>Prototipo en vivo</h3>
+        <p>La app real: editor de patrones, biblioteca y login por huella.</p>
+      </a>
+
+    </div>
+
+    <div class="lt-group">
+      <div class="lt-group-label">Documentación</div>
+      <div class="lt-links">
+
+        <a class="lt-link" href="https://manfredojuanignacio08-prog.github.io/Documentacion-AutotizaciondeTelar/" target="_blank" rel="noopener">
+          <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M8.5 13h7M8.5 16.5h7M8.5 9.5h3"/></svg></div>
+          <h3>Documentación técnica</h3>
+          <p>Relevamiento, requerimientos, diagramas y decisiones de diseño.</p>
+        </a>
+
+        <a class="lt-link" href="https://manfredojuanignacio08-prog.github.io/Manuales_de_Uso_CIT/" target="_blank" rel="noopener">
+          <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.5 2.5 0 0 1 4.8 1c0 1.7-2.3 1.9-2.3 3.5"/><path d="M12 17.2v.1"/></svg></div>
+          <h3>Manual de uso</h3>
+          <p>Guía paso a paso para operar la app desde cero.</p>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="lt-group">
+      <div class="lt-group-label">Planificación y código</div>
+      <div class="lt-links">
+
+        <a class="lt-link" href="https://docs.google.com/spreadsheets/d/1j9wnMkIVjhfJJa1L1moT2Me8cceHcB-8K-QVOFKrYMg/edit?usp=drive" target="_blank" rel="noopener">
+          <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/><path d="M7.5 13h2v2h-2zM11 13h2v2h-2zM14.5 13h2v2h-2zM7.5 17h2v1.5h-2z"/></svg></div>
+          <h3>Cronograma Gantt</h3>
+          <p>Planificación completa de etapas y horas del proyecto.</p>
+        </a>
+
+        <a class="lt-link" href="https://github.com/manfredojuanignacio08-prog/control_insercion_trama" target="_blank" rel="noopener">
+          <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18c-4 1.5-4-2-6-2m12 4v-3.5c0-1 .1-1.4-.5-2 2-.2 4.5-1 4.5-4.5 0-1-.4-1.9-1-2.6.1-.3.4-1.4-.1-2.8 0 0-.8-.3-2.8 1a10 10 0 0 0-5 0c-2-1.3-2.8-1-2.8-1-.5 1.4-.2 2.5-.1 2.8-.6.7-1 1.6-1 2.6 0 3.5 2.5 4.3 4.5 4.5-.3.3-.5.7-.5 1.3V18"/></svg></div>
+          <h3>Repositorio GitHub</h3>
+          <p>Código fuente: firmware del ESP32, backend, base de datos y frontend.</p>
+        </a>
+
+        <a class="lt-link" href="https://drive.google.com/drive/folders/1_fm_XLeg3niDwfOnUQ7fJfQqJblQ3a85?usp=drive_link" target="_blank" rel="noopener">
+          <div class="icon-box"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></div>
+          <h3>Carpeta del proyecto</h3>
+          <p>Drive con entrevistas, contratos, presupuestos y toda la carpeta técnica.</p>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="lt-footer">
+      <p>Control de Inserción de Trama</p>
+      <p>Grupo 5 — InfoB — 2026</p>
+    </div>
+  </div>
+
+  <div class="strip"><svg viewBox="0 0 720 18" preserveAspectRatio="none"><rect x="0" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="18" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="36" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="54" y="0" width="15" height="15" fill="#3D6B96"/><rect x="72" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="90" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="108" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="126" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="144" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="162" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="180" y="0" width="15" height="15" fill="#3D6B96"/><rect x="198" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="216" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="234" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="252" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="270" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="288" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="306" y="0" width="15" height="15" fill="#3D6B96"/><rect x="324" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="342" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="360" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="378" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="396" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="414" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="432" y="0" width="15" height="15" fill="#3D6B96"/><rect x="450" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="468" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="486" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="504" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="522" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="540" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="558" y="0" width="15" height="15" fill="#3D6B96"/><rect x="576" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="594" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="612" y="0" width="15" height="15" fill="#5F8AB0"/><rect x="630" y="0" width="15" height="15" fill="#1E3A5F"/><rect x="648" y="0" width="15" height="15" fill="#3F4B5C"/><rect x="666" y="0" width="15" height="15" fill="#E8EDF1"/><rect x="684" y="0" width="15" height="15" fill="#3D6B96"/><rect x="702" y="0" width="15" height="15" fill="#3F4B5C"/></svg></div>
+
+</body>
+</html>
